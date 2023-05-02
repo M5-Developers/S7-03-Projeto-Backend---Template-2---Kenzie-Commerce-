@@ -1,0 +1,66 @@
+Project eKomerce {
+database_type: 'PostgreSQL'
+Note: 'eKomerce'
+}
+
+Table users {
+  id integer [primary key]
+  username varchar(max_length 50)
+  email varchar(max_length 127)
+  first_name varchar (max_length 150)
+  last_name  varchar(max_length 150)
+  is_staff BooleanField(default False)
+  is_active BooleanField(default True)
+  is_superuser BooleanField(default True)
+  created_at datetime(default now())
+  address_id integer (FK Unique)
+}
+
+Table address{
+  id integer [primary key]
+  street varchar(max_length 127)
+  cep varchar(length 8)
+  number varchar(max_length 127)
+}
+
+Table product{
+  id integer [primary key]
+  name varchar(max_length 127)
+  category varchar (max_length 50)
+  price numeric (decimal_fields 2, max_length 8)
+  quantity integer(min 0)
+  Available BooleanField(default True)
+  owner_id integer(Fk)
+}
+
+Table cart{
+  id integer [primary key]
+  user_id integer (FK)
+  quantity integer 
+}
+
+Table cart_product{
+  id integer [primary key]
+  cart_id integer (FK)
+  product_id integer (FK)
+}
+
+table order{
+  id integer [primary key]
+  user_id integer(FK)
+  status status
+  created_at datetime (default now())
+}
+
+Enum status{
+  "Pedido REALIZADO"
+  "EM ANDAMENTO"
+  "ENTREGUE"
+}
+
+REF: address.id - users.address_id // 1:1
+REF: users.id < product.owner_id // 1:M
+REF: cart.id <> cart_product.cart_id //M:M cart_product
+REF: product.id <> cart_product.product_id //M:M cart_product
+REF: order.user_id < users.id // M:1
+REF: users.id < cart.user_id // 1:1
