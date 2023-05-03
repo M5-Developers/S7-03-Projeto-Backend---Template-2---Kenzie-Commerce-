@@ -4,7 +4,7 @@ from .serializers import OrderSerializer,Order
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-class orders_view(generics.ListCreateAPIView):
+class OrderView(generics.ListCreateAPIView):
 
     authentication_classes=[JWTAuthentication]
     permission_classes=[IsAuthenticated]

@@ -58,7 +58,7 @@ DJANGO_APPS = [
 
 MY_APPS = [
     "accounts",
-    "orders"
+    "orders",
     "products",
 ]
 
