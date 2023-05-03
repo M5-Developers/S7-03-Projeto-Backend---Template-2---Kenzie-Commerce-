@@ -27,8 +27,10 @@ class AddressView(generics.ListCreateAPIView):
         returned_information = serialized(self.get_queryset(), many=True)
         return Response(returned_information.data, status.HTTP_200_OK)
 
-    def perform_create(self, serializer):
-        find_address = Address.objects.filter(**serializer.validated_data)
+    def post(self, request, *args, **kwargs):
+        serialized = self.serializer_class(data=request.data)
+        serialized.is_valid()
+        find_address = Address.objects.filter(**serialized.validated_data)
         if find_address:
             return Response(
                 { "message": "Endereço já registrado." },
@@ -36,7 +38,13 @@ class AddressView(generics.ListCreateAPIView):
             )
 
         find_user = Account.objects.filter(id=self.request.user.id).first()
-        serializer.save(account=find_user)
+        if find_user.account_address:
+            return Response(
+                { "message": "Usuário já possui um endereço registrado" },
+                status.HTTP_403_FORBIDDEN
+            )
+        serialized.save(account=find_user)
+        return Response(serialized.data, status.HTTP_201_CREATED)
 
 class AddressByIdView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
