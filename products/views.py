@@ -10,3 +10,13 @@ class ProductView(generics.ListCreateAPIView):
 	
 	queryset = models.Product.objects.all()
 	serializer_class = serializers.ProductSerializer
+
+	def perform_create(self, serializer):
+		serializer.save(seller_id=self.request.user.id)
+
+class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
+	authentication_classes = [JWTAuthentication]
+	permission_classes = [IsAuthenticatedOrReadOnly, IsSeller]
+	
+	queryset = models.Product.objects.all()
+	serializer_class = serializers.ProductSerializer
