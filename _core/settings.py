@@ -58,6 +58,7 @@ DJANGO_APPS = [
 
 MY_APPS = [
     "accounts",
+    "orders",
     "products",
     "carts"
 ]
@@ -107,7 +108,7 @@ WSGI_APPLICATION = "_core.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
+    "outro": {
         "ENGINE": "django.db.backends.postgresql",
         "USER": os.getenv("POSTGRES_USERNAME"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
@@ -115,7 +116,7 @@ DATABASES = {
         "HOST": os.getenv("POSTGRES_DB_HOST"),
         "PORT": os.getenv("POSTGRES_DB_PORT"),
     },
-    "outro_nome": {
+    "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     },
