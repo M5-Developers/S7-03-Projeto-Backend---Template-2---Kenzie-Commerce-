@@ -1,16 +1,16 @@
 from django.db import models
-from users.models import User
+from accounts.models import Account
 
 # Create your models here.
 class Address(models.Model):
     street = models.CharField(max_length=127)
-    cep = models.IntegerField(max_length=8)
+    cep = models.CharField(max_length=8)
     number = models.CharField(max_length=127)
 
-    user = models.OneToOneField(
-        User,
+    account = models.OneToOneField(
+        Account,
         on_delete=models.CASCADE,
-        related_name="user_address"
+        related_name="account_address"
     )
 
     class Meta:
