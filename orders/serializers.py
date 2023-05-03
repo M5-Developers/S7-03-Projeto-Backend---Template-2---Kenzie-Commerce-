@@ -11,4 +11,9 @@ class OrderSerializer(serializers.ModelSerializer):
             'status',
             'created_at'
         ]
-        extra_kwargs={'id':{'read_only':True},'created_at':{'read_only':True}}
+        depth=1
+        extra_kwargs={
+            'id':{'read_only':True},
+            'created_at':{'read_only':True},
+            'user_id':{'read_only':True}
+        }

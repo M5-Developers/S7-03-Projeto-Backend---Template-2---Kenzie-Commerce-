@@ -3,7 +3,7 @@ database_type: 'PostgreSQL'
 Note: 'eKomerce'
 }
 
-Table users {
+Table account {
   id integer [primary key]
   username varchar(max_length 50)
   email varchar(max_length 127)
@@ -30,25 +30,26 @@ Table product{
   price numeric (decimal_fields 2, max_length 8)
   quantity integer(min 0)
   Available BooleanField(default True)
-  owner_id integer(Fk)
+  seller_id integer(Fk)
 }
 
 Table cart{
   id integer [primary key]
-  user_id integer (FK)
-  quantity integer 
+  account_id integer (FK)
 }
 
 Table cart_product{
   id integer [primary key]
   cart_id integer (FK)
   product_id integer (FK)
+  quantity integer 
 }
 
 table order{
   id integer [primary key]
-  user_id integer(FK)
+  account_id integer(FK)
   status status
+  cart_id integer(FK)
   created_at datetime (default now())
 }
 
@@ -58,9 +59,10 @@ Enum status{
   "ENTREGUE"
 }
 
-REF: address.id - users.address_id // 1:1
-REF: users.id < product.owner_id // 1:M
-REF: cart.id <> cart_product.cart_id //M:M cart_product
-REF: product.id <> cart_product.product_id //M:M cart_product
-REF: order.user_id < users.id // M:1
-REF: users.id < cart.user_id // 1:1
+REF: address.id - account.address_id // 1:1
+REF: account.id < product.seller_id // 1:M
+REF: cart.id < cart_product.cart_id //1:M cart_product
+REF: product.id < cart_product.product_id //1:M cart_product
+REF: order.account_id > account.id // M:1
+REF: account.id - cart.account_id // 1:1
+REF: cart.id - order.cart_id 
