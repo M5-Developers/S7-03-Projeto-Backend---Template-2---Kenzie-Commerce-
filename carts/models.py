@@ -5,3 +5,16 @@ class Cart(models.Model):
         'accounts.Account',
 		on_delete=models.CASCADE
     )
+
+class CartProduct(models.Model):
+    quantity = models.IntegerField()
+    cart = models.ForeignKey(
+        'carts.Cart',
+        on_delete=models.CASCADE,
+        related_name='carts'
+	)
+    product = models.ForeignKey(
+        'products.Product',
+        on_delete=models.CASCADE,
+        related_name='products'
+	)
