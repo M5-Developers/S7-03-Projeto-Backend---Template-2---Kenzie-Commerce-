@@ -3,6 +3,7 @@ from rest_framework import generics
 from .serializers import OrderSerializer,Order
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
+from accounts.permissions import IsSeller
 
 class OrderView(generics.ListCreateAPIView):
 
@@ -13,5 +14,14 @@ class OrderView(generics.ListCreateAPIView):
     queryset=Order.objects.all()
 
     def perform_create(self, serializer):
-        user=self.request.pop('user')
-        serializer.save(user=user)
+        serializer.save(user=self.request.user)
+
+class OrderViewDetail(generics.RetrieveUpdateDestroyAPIView):
+
+    authentication_classes=[JWTAuthentication]
+    permission_classes=[IsSeller]
+
+    serializer_class=OrderSerializer
+    queryset=Order.objects.all()
+
+    

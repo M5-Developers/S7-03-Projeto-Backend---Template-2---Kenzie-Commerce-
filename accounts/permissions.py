@@ -11,4 +11,5 @@ class IsAccountOnwer(permissions.BasePermission):
 
 class IsSeller(permissions.BasePermission):
     def has_permission(self, request:Request, view:View):
-        return request.user.is_staff
+        type:str=request.user.type.lower()
+        return type=='seller' or type=='admin'
