@@ -13,3 +13,4 @@ class IsSeller(permissions.BasePermission):
     def has_permission(self, request:Request, view:View):
         type:str=request.user.type.lower()
         return type=='seller' or type=='admin'
+    
