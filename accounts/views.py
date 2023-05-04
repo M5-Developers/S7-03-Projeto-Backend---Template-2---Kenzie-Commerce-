@@ -2,7 +2,6 @@ from accounts.permissions import IsAccountOnwer
 from .serializers import AccountSerializer
 from .models import Account
 from rest_framework import generics
-
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema
