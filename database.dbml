@@ -1,0 +1,70 @@
+table account{ 
+  id integer [pk]
+  username varchar(max_length 50)
+  email varchar(max_length 127)
+  first_name varchar(max_length 150)
+  last_name varchar(max_length 150)
+  is_staff BooleanField(default False)
+  is_active BooleanField(default True)
+  is_superuser BooleanField(default True)
+  created_at datetime(default now())
+  address_id integer(FK Unique)
+}
+
+table adress{
+  id integer [PK] 
+  street varchar(max_length 127)
+  cep varchar(length 8)
+  number varchar(max_length 127)
+}
+
+table product{
+  id integer [PK]
+  name varchar(max_length 127)
+  category varchar(max_length 50)
+  price numeric(decimal_fields 2, max_length 8)
+  quantity integer(min 0) 
+  Available BooleanField(default True)
+  seller_id integer(Fk)
+}
+
+table cart{
+  id integer [PK]
+  account_id integer(FK)
+}
+
+table cart_product{
+  id integer [PK]
+  cart_id integer(FK)
+  product_id integer(FK) 
+  quantity integer
+}
+
+table order{
+  id integer [PK]
+  account_id integer(FK)
+  status status
+  created_at datetime(default now())
+}
+
+enum status{
+  "In progress"
+  "Delivered"
+  "pending"
+}
+
+table product_order{
+  id integer [PK]
+  product_id integer(Fk)
+  order_id integer(Fk)
+  quantity integer
+}
+
+ref: order.account_id - account.id
+ref: cart.account_id - account.id
+ref: cart_product.cart_id > cart.id
+ref: cart_product.product_id > product.id
+ref: product.seller_id > account.id
+ref: account.address_id - adress.id
+ref: product_order.product_id > product.id
+ref: product_order.order_id > order.id
