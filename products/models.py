@@ -19,3 +19,8 @@ class Product(models.Model):
 	price = models.DecimalField(max_digits=8, decimal_places=2)
 	quantity = models.IntegerField(validators=[MinValueValidator(0)])
 	available = models.BooleanField(default=True)
+	seller = models.ForeignKey(
+		'accounts.Account',
+		on_delete=models.CASCADE,
+		related_name='products'
+	)

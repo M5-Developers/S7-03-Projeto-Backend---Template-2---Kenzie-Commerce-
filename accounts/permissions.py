@@ -10,7 +10,9 @@ class IsAccountOnwer(permissions.BasePermission):
     
 
 class IsSeller(permissions.BasePermission):
-    def has_permission(self, request:Request, view:View):
-        type:str=request.user.type.lower()
-        return type=='seller' or type=='admin'
-    
+	def has_permission(self, request:Request, view:View):
+		if request.method in permissions.SAFE_METHODS:
+			return True
+		
+		type:str=request.user.type.lower()
+		return type=='seller' or type=='admin'
