@@ -10,7 +10,6 @@ class Address(models.Model):
     account = models.OneToOneField(
         Account,
         on_delete=models.CASCADE,
-        related_name="account_address"
     )
 
     class Meta:
