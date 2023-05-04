@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name="Address",
+            name="Order",
             fields=[
                 (
                     "id",
@@ -25,19 +25,27 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("street", models.CharField(max_length=127)),
-                ("cep", models.CharField(max_length=8)),
-                ("number", models.CharField(max_length=127)),
                 (
-                    "account",
-                    models.OneToOneField(
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("Pending", "Pending"),
+                            ("In progress", "Inprogress"),
+                            ("Delivered", "Delivered"),
+                        ],
+                        default="Pending",
+                        max_length=20,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "user",
+                    models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
+                        related_name="orders",
                         to=settings.AUTH_USER_MODEL,
                     ),
                 ),
             ],
-            options={
-                "ordering": ["id"],
-            },
         ),
     ]
