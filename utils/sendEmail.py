@@ -50,7 +50,7 @@ def send_html(email='',status=''):
         <head>
         </head>
         <body>
-            <p>Hi your order is been Pendding</p>
+            <p>Hi your order is been Pending</p>
             <br/>
             <span style="font-size:60px;color:orange;">Pending</span>
             <br/>
