@@ -38,13 +38,17 @@ class AddressView(generics.ListCreateAPIView):
             )
 
         find_user = Account.objects.filter(id=self.request.user.id).first()
-        if find_user.account_address:
+        if find_user.address:
             return Response(
-                { "message": "Usuário já possui um endereço registrado" },
-                status.HTTP_403_FORBIDDEN
+                { "message": "Usuário já possui um endereço cadastrado." },
+                status.HTTP_409_CONFLICT
             )
-        serialized.save(account=find_user)
-        return Response(serialized.data, status.HTTP_201_CREATED)
+        
+        saved_info = serialized.save(account=find_user)
+        serialized_return = self.serializer_class(instance=saved_info)
+        find_user.address = saved_info
+        find_user.save()
+        return Response(serialized_return.data, status.HTTP_201_CREATED)
 
 class AddressByIdView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]

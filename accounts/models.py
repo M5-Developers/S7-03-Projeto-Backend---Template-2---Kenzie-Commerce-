@@ -7,3 +7,10 @@ class Account(AbstractUser):
 	first_name = models.CharField(max_length=127)
 	last_name = models.CharField(max_length=127)
 	type = models.CharField(max_length=127, default='')
+
+	address = models.OneToOneField(
+		"address.Address",
+		on_delete=models.SET_NULL,
+		related_name="account",
+		null=True
+	)
