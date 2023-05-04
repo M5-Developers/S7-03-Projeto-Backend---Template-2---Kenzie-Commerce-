@@ -8,3 +8,10 @@ class IsAccountOnwer(permissions.BasePermission):
         self, request: Request, view: View, obj: Account
     ) -> bool:
         return request.user == obj
+
+
+class IsSeller(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method=='PUT' or request.method=='PATCH':
+            return request.user.is_staff
+        return True
