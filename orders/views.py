@@ -3,9 +3,9 @@ from rest_framework import generics
 from .serializers import OrderSerializer,Order
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
-from accounts.permissions import IsSeller
 from utils.sendEmail import send_html
 from accounts.models import Account
+from accounts.permissions import IsSeller
 
 class OrderView(generics.ListCreateAPIView):
 
