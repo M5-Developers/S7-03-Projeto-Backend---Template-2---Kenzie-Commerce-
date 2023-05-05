@@ -29,7 +29,7 @@ class AddressView(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         serialized = self.serializer_class(data=request.data)
-        serialized.is_valid()
+        serialized.is_valid(raise_exception=True)
         find_address = Address.objects.filter(**serialized.validated_data)
         if find_address:
             return Response(
@@ -57,3 +57,6 @@ class AddressByIdView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
     lookup_url_kwarg = "address_id"
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
