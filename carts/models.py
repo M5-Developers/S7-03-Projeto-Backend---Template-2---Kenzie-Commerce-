@@ -6,6 +6,11 @@ class Cart(models.Model):
         'accounts.Account',
 		on_delete=models.CASCADE
     )
+    products = models.ManyToManyField(
+        'products.Product',
+		through='carts.CartProduct',
+        related_name='carts'
+	)
 
 class CartProduct(models.Model):
     quantity = models.IntegerField(validators=[MinValueValidator(0)])
