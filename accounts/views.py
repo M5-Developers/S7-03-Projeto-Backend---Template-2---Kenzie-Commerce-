@@ -5,12 +5,16 @@ from rest_framework import generics
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema
-
+from carts.models import Cart
 
 # MRO - Method Resolution Order
 class AccountView(generics.ListCreateAPIView):
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
+        cart = Cart.objects.create(account_id=serializer.data['id'])
 
     @extend_schema(
         operation_id="accounts_list",
