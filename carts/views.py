@@ -49,4 +49,4 @@ class CartProductView(generics.CreateAPIView):
 
 			return cart_product_serializer.save()
 
-		serializer.save(cart_id=cart.id)
+		serializer.save(cart_id=cart.id, product_id=product_id)

@@ -13,8 +13,7 @@ class CartProductSerializer(serializers.ModelSerializer):
 		read_only_fields = ['cart', 'product']
 
 class CartSerializer(serializers.ModelSerializer):
-	cart_products = CartProductSerializer(many=True)
-	
 	class Meta:
 		model = models.Cart
-		fields = '__all__'
+		fields = ['account_id', 'products']
+		depth = 1
