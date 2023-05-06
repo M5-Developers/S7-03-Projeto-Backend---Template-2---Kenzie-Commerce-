@@ -50,3 +50,11 @@ class CartProductView(generics.CreateAPIView):
 			return cart_product_serializer.save()
 
 		serializer.save(cart_id=cart.id, product_id=product_id)
+
+class CartProductDetailView(generics.UpdateAPIView):
+	authentication_classes = [JWTAuthentication]
+	permission_classes = [permissions.IsAuthenticated]
+
+	queryset = models.CartProduct.objects.all()
+	serializer_class = serializers.CartProductSerializer
+	lookup_field = 'cart_id'

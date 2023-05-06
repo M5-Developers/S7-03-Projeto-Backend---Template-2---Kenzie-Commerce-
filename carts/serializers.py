@@ -1,8 +1,12 @@
 from rest_framework import serializers
 from . import models
+import ipdb
 
 class CartProductSerializer(serializers.ModelSerializer):
 	def update(self, instance, validated_data):
+		if self.context['request'].method == 'PATCH':
+			return super().update(instance, validated_data)
+		
 		instance.quantity += validated_data['quantity']
 		instance.save()
 		return instance
