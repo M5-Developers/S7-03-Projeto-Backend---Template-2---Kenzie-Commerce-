@@ -83,6 +83,20 @@ class CartProductDetailView(generics.UpdateAPIView):
 	lookup_field = 'cart_id'
 
 	@extend_schema(
+		operation_id="cart_put",
+		responses={200: serializers.CartProductSerializer},
+		parameters=[
+                serializers.CartProductSerializer,
+                OpenApiParameter("cart_id", OpenApiTypes.UUID, OpenApiParameter.PATH)
+            ],
+		description="Rota de atualização de um carrinho",
+		summary="Atualiza totalmente um carrinho especificado pelo ID",
+		tags=["Rotas de Carts"]
+	)
+	def put(self, request, *args, **kwargs):
+		return super().put(request, *args, **kwargs)
+
+	@extend_schema(
 		operation_id="cart_update",
 		responses={200: serializers.CartProductSerializer},
 		parameters=[
@@ -90,7 +104,7 @@ class CartProductDetailView(generics.UpdateAPIView):
                 OpenApiParameter("cart_id", OpenApiTypes.UUID, OpenApiParameter.PATH)
             ],
 		description="Rota de atualização de um carrinho",
-		summary="Atualiza um carrinho especificado pelo ID",
+		summary="Atualiza parcialmente um carrinho especificado pelo ID",
 		tags=["Rotas de Carts"]
 	)
 	def patch(self, request, *args, **kwargs):
