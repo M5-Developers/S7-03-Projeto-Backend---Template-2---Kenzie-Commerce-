@@ -83,7 +83,6 @@ class CartProductDetailView(generics.UpdateAPIView):
 	serializer_class = serializers.CartProductSerializer
 	lookup_field = 'cart_id'
 
-<<<<<<< HEAD
 class CartProductDeleteView(generics.DestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [permissions.IsAuthenticated]
@@ -98,33 +97,31 @@ class CartProductDeleteView(generics.DestroyAPIView):
         return cart_product
 
     
+	# @extend_schema(
+	# 	operation_id="cart_put",
+	# 	responses={200: serializers.CartProductSerializer},
+	# 	parameters=[
+    #             serializers.CartProductSerializer,
+    #             OpenApiParameter("cart_id", OpenApiTypes.UUID, OpenApiParameter.PATH)
+    #         ],
+	# 	description="Rota de atualização de um carrinho",
+	# 	summary="Atualiza totalmente um carrinho especificado pelo ID",
+	# 	tags=["Rotas de Carts"]
+	# )
+	# def put(self, request, *args, **kwargs):
+	# 	return super().put(request, *args, **kwargs)
 
-=======
-	@extend_schema(
-		operation_id="cart_put",
-		responses={200: serializers.CartProductSerializer},
-		parameters=[
-                serializers.CartProductSerializer,
-                OpenApiParameter("cart_id", OpenApiTypes.UUID, OpenApiParameter.PATH)
-            ],
-		description="Rota de atualização de um carrinho",
-		summary="Atualiza totalmente um carrinho especificado pelo ID",
-		tags=["Rotas de Carts"]
-	)
-	def put(self, request, *args, **kwargs):
-		return super().put(request, *args, **kwargs)
+	# @extend_schema(
+	# 	operation_id="cart_update",
+	# 	responses={200: serializers.CartProductSerializer},
+	# 	parameters=[
+    #             serializers.CartProductSerializer,
+    #             OpenApiParameter("cart_id", OpenApiTypes.UUID, OpenApiParameter.PATH)
+    #         ],
+	# 	description="Rota de atualização de um carrinho",
+	# 	summary="Atualiza parcialmente um carrinho especificado pelo ID",
+	# 	tags=["Rotas de Carts"]
+	# )
+	# def patch(self, request, *args, **kwargs):
+	# 	return super().patch(request, *args, **kwargs)
 
-	@extend_schema(
-		operation_id="cart_update",
-		responses={200: serializers.CartProductSerializer},
-		parameters=[
-                serializers.CartProductSerializer,
-                OpenApiParameter("cart_id", OpenApiTypes.UUID, OpenApiParameter.PATH)
-            ],
-		description="Rota de atualização de um carrinho",
-		summary="Atualiza parcialmente um carrinho especificado pelo ID",
-		tags=["Rotas de Carts"]
-	)
-	def patch(self, request, *args, **kwargs):
-		return super().patch(request, *args, **kwargs)
->>>>>>> 78d9850a68d62cfbfdbcf9621d7a100deaf0f7ca
