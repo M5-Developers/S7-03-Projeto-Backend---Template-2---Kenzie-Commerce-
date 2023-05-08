@@ -101,7 +101,7 @@ class OrderViewDetail(generics.RetrieveUpdateDestroyAPIView):
         return super().patch(self, request, *args, **kwargs)
     
     @extend_schema(
-        operation_id="order_patch",
+        operation_id="order_delete",
         responses={204: None},
         parameters=[
                 OpenApiParameter("id", OpenApiTypes.UUID, OpenApiParameter.PATH)
