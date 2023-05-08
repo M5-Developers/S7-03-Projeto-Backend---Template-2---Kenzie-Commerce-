@@ -58,3 +58,19 @@ class CartProductDetailView(generics.UpdateAPIView):
 	queryset = models.CartProduct.objects.all()
 	serializer_class = serializers.CartProductSerializer
 	lookup_field = 'cart_id'
+
+class CartProductDeleteView(generics.DestroyAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    queryset = models.CartProduct.objects.all()
+
+    def get_object(self):
+        cart_id = self.kwargs.get('cart_id')
+        product_id = self.kwargs.get('product_id')
+        account_id = self.request.user.id
+        cart_product = self.queryset.filter(cart_id=cart_id, product_id=product_id, cart__account_id=account_id).first()
+        return cart_product
+
+    
+
