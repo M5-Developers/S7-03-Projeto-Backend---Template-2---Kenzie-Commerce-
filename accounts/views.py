@@ -32,7 +32,9 @@ class AccountView(generics.ListCreateAPIView):
         operation_id="accounts_create",
         responses={201: AccountSerializer},
         parameters=[AccountSerializer],
-        description="Rota de criação de contas de usuários, ",
+        description=("Rota de criação de contas de usuários, o requisição precisa receber obrigatoriamente \
+                    'first_name', 'last_name', 'password', 'username' e 'email', 'is_superuser' e 'is_staff' são opcionais e como default eles são False.\
+                    \nCaso o is_superuser seja True, o usuário será um administrador e caso o is_staff seja True, o usuário será um vendedor."),
         summary="Cria um usuário",
         tags=["Rotas de Accounts"],
     )

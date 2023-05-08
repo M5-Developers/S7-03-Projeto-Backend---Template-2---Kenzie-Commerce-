@@ -44,7 +44,7 @@ class ProductView(generics.ListCreateAPIView):
 	@extend_schema(
 		operation_id="product_create",
 		responses={200: serializers.ProductSerializer},
-		description="Rota de criação de um produto",
+		description="Rota de criação de um produto, é obrigatório as propriedades: 'name', 'category', 'price', 'quantity', caso a quantidade é 0, a propriedade 'avaliable' será False",
 		summary="Cria um produto",
 		tags=["Rotas de Products"]
 	)

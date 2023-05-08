@@ -43,7 +43,7 @@ class AddressView(generics.ListCreateAPIView):
     @extend_schema(
         operation_id="address_create",
         responses={201: AddressSerializer},
-        description="Rota de criação de endereço",
+        description="Rota de criação de endereço, é obrigatório as propriedades: 'street', 'cep', 'number'",
         summary="Cria um endereço",
         tags=["Rotas de Address"],
     )

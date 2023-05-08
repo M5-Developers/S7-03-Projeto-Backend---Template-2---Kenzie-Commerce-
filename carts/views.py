@@ -67,7 +67,8 @@ class CartProductView(generics.CreateAPIView):
 	@extend_schema(
 		operation_id="cart_create",
 		responses={201: serializers.CartProductSerializer},
-		description="Rota de criação de carrinho ou adição de item no carrinho",
+		description="Rota de criação de carrinho ou adição de item no carrinho, cria automaticamente um carrinho caso o usuário não tenha nenhum carrinho registrado \
+					caso o usuário possua um carrinho, o item será adicionado ao carrinho já existente",
 		summary="Cria um carrinho e/ou adiciona um produto dentro do mesmo",
 		tags=["Rotas de Carts"]
 	)
