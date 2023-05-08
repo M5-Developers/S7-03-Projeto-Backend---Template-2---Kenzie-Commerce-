@@ -5,6 +5,9 @@ from products.models import Product
 from django.shortcuts import get_object_or_404
 import ipdb
 
+from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.types import OpenApiTypes
+
 class CartDetailView(generics.RetrieveAPIView):
 	authentication_classes = [JWTAuthentication]
 	permission_classes = [permissions.IsAuthenticated]
@@ -18,6 +21,16 @@ class CartDetailView(generics.RetrieveAPIView):
 		cart = self.queryset.get(account_id=account_id)
 
 		return cart
+
+	@extend_schema(
+		operation_id="carts_list",
+		responses={200: serializers.CartSerializer},
+		description="Rota de listagem de todos os carrinhos",
+		summary="Lista todos os carrinhos",
+		tags=["Rotas de Carts"]
+	)
+	def get(self, request, *args, **kwargs):
+		return super().get(request, *args, **kwargs)
 
 class CartProductView(generics.CreateAPIView):
 	authentication_classes = [JWTAuthentication]
@@ -51,6 +64,17 @@ class CartProductView(generics.CreateAPIView):
 
 		serializer.save(cart_id=cart.id, product_id=product_id)
 
+	@extend_schema(
+		operation_id="cart_create",
+		responses={201: serializers.CartProductSerializer},
+		description="Rota de criação de carrinho ou adição de item no carrinho, cria automaticamente um carrinho caso o usuário não tenha nenhum carrinho registrado \
+					caso o usuário possua um carrinho, o item será adicionado ao carrinho já existente",
+		summary="Cria um carrinho e/ou adiciona um produto dentro do mesmo",
+		tags=["Rotas de Carts"]
+	)
+	def post(self, request, *args, **kwargs):
+		return super().post(request, *args, **kwargs)
+
 class CartProductDetailView(generics.UpdateAPIView):
 	authentication_classes = [JWTAuthentication]
 	permission_classes = [permissions.IsAuthenticated]
@@ -58,3 +82,31 @@ class CartProductDetailView(generics.UpdateAPIView):
 	queryset = models.CartProduct.objects.all()
 	serializer_class = serializers.CartProductSerializer
 	lookup_field = 'cart_id'
+
+	@extend_schema(
+		operation_id="cart_put",
+		responses={200: serializers.CartProductSerializer},
+		parameters=[
+                serializers.CartProductSerializer,
+                OpenApiParameter("cart_id", OpenApiTypes.UUID, OpenApiParameter.PATH)
+            ],
+		description="Rota de atualização de um carrinho",
+		summary="Atualiza totalmente um carrinho especificado pelo ID",
+		tags=["Rotas de Carts"]
+	)
+	def put(self, request, *args, **kwargs):
+		return super().put(request, *args, **kwargs)
+
+	@extend_schema(
+		operation_id="cart_update",
+		responses={200: serializers.CartProductSerializer},
+		parameters=[
+                serializers.CartProductSerializer,
+                OpenApiParameter("cart_id", OpenApiTypes.UUID, OpenApiParameter.PATH)
+            ],
+		description="Rota de atualização de um carrinho",
+		summary="Atualiza parcialmente um carrinho especificado pelo ID",
+		tags=["Rotas de Carts"]
+	)
+	def patch(self, request, *args, **kwargs):
+		return super().patch(request, *args, **kwargs)
