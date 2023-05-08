@@ -122,9 +122,8 @@ class AddressByIdView(generics.RetrieveUpdateDestroyAPIView):
     
     @extend_schema(
         operation_id="address_delete",
-        responses={204: AddressSerializer},
+        responses={204: None},
         parameters=[
-                AddressSerializer,
                 OpenApiParameter("address_id", OpenApiTypes.UUID, OpenApiParameter.PATH)
             ],
         description="Rota permite deletar um endereço através do ID passado pelo parâmetro 'address_id",

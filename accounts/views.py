@@ -52,6 +52,10 @@ class AccountDetailView(generics.RetrieveUpdateDestroyAPIView):
     @extend_schema(
         operation_id="accounts_list_by_id",
         responses={200: AccountSerializer},
+        parameters=[
+                AccountSerializer,
+                OpenApiParameter("account_id", OpenApiTypes.UUID, OpenApiParameter.PATH)
+            ],
         description="Rota de listagem de um usuário, apenas o proprio usuário pode acessar essa rota",
         summary="Lista um usuário especificado pelo ID",
         tags=["Rotas de Accounts"],
@@ -89,9 +93,8 @@ class AccountDetailView(generics.RetrieveUpdateDestroyAPIView):
     
     @extend_schema(
             operation_id="accounts_delete",
-            responses={204: AccountSerializer},
+            responses={204: None},
             parameters=[
-                AccountSerializer,
                 OpenApiParameter("account_id", OpenApiTypes.UUID, OpenApiParameter.PATH)
             ],
             description="Rota permite deletar um usuário através do ID passado pelo parâmetro 'account_id'",
