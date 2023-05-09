@@ -27,7 +27,7 @@ class OrderView(generics.ListCreateAPIView):
     serializer_class=OrderSerializer
 
     def perform_create(self, serializer):
-        # send_html(self.request.user.email, "Pending")
+        send_html(self.request.user.email, "Pending")
         user = self.request.user
         serializer.save(user=user)
 
@@ -40,9 +40,8 @@ class OrderView(generics.ListCreateAPIView):
             ProductOrder.objects.create(order_id=order_id, product=product,\
                                         quantity=user.cart.cart_products.select_related().get(product_id=product.id).quantity)
             
-        teste = user.cart.products.set([])
-        teste = user.save()
-        print(model_to_dict(Order.objects.filter(id=order_id).first()))
+        user.cart.products.set([])
+        user.save()
 
     @extend_schema(
         operation_id="order_list",
