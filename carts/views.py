@@ -96,7 +96,7 @@ class CartProductDeleteView(generics.DestroyAPIView):
 		cart_product = self.queryset.filter(cart_id=cart_id, product_id=product_id, cart__account_id=account_id).first()
 		return cart_product
 
-    
+		
 
 	@extend_schema(
 		operation_id="cart_put",

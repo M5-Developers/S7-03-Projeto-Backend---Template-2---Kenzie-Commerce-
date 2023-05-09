@@ -47,7 +47,7 @@ class OrderView(generics.ListCreateAPIView):
         tags=["Rotas de Orders"],
     )
 	def post(self, request, *args, **kwargs):
-		return super().get(self, request, *args, **kwargs)
+		return super().post(self, request, *args, **kwargs)
 
 	@extend_schema(
         operation_id="order_list",
@@ -67,7 +67,7 @@ class OrderView(generics.ListCreateAPIView):
         tags=["Rotas de Orders"],
     )
 	def post(self, request, *args, **kwargs):
-		return super().get(self, request, *args, **kwargs)
+		return super().post(self, request, *args, **kwargs)
 
 class OrderViewDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
