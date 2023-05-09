@@ -1,11 +1,14 @@
 from rest_framework import generics
-from .serializers import OrderSerializer
+from .serializers import OrderSerializer	
 from .models import Order, ProductOrder
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from utils.sendEmail import send_html
 from accounts.models import Account
 from accounts.permissions import IsSeller
+
+from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.types import OpenApiTypes
 
 class OrderView(generics.ListCreateAPIView):
 	authentication_classes = [JWTAuthentication]
@@ -26,6 +29,46 @@ class OrderView(generics.ListCreateAPIView):
 			ProductOrder.objects.create(order_id=order_id, product=product, quantity=user.cart.cart_products.select_related().get(product_id=product.id).quantity)
 
 
+	@extend_schema(
+        operation_id="order_list",
+        responses={200: OrderSerializer},
+        description="Rota de listagem de pedidos de compra",
+        summary="Lista todos os pedidos de compra",
+        tags=["Rotas de Orders"],
+    )
+	def get(self, request, *args, **kwargs):
+		return super().get(self, request, *args, **kwargs)
+    
+	@extend_schema(
+        operation_id="order_create",
+        responses={200: OrderSerializer},
+        description="Rota de criação de pedidos de compra",
+        summary="Cria um pedido de compra",
+        tags=["Rotas de Orders"],
+    )
+	def post(self, request, *args, **kwargs):
+		return super().get(self, request, *args, **kwargs)
+
+	@extend_schema(
+        operation_id="order_list",
+        responses={200: OrderSerializer},
+        description="Rota de listagem de pedidos de compra",
+        summary="Lista todos os pedidos de compra",
+        tags=["Rotas de Orders"],
+    )
+	def get(self, request, *args, **kwargs):
+		return super().get(self, request, *args, **kwargs)
+    
+	@extend_schema(
+        operation_id="order_create",
+        responses={200: OrderSerializer},
+        description="Rota de criação de pedidos de compra",
+        summary="Cria um pedido de compra",
+        tags=["Rotas de Orders"],
+    )
+	def post(self, request, *args, **kwargs):
+		return super().get(self, request, *args, **kwargs)
+
 class OrderViewDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsSeller]
@@ -40,6 +83,61 @@ class OrderViewDetail(generics.RetrieveUpdateDestroyAPIView):
         send_html(user_email,self.request.data['status'])
         
         serializer.save()
+
+    @extend_schema(
+        operation_id="order_list_by_id",
+        responses={200: OrderSerializer},
+        parameters=[
+                OrderSerializer,
+                OpenApiParameter("pk", OpenApiTypes.UUID, OpenApiParameter.PATH)
+            ],
+        description="Rota de listagem de um pedido de compra, apenas o vendedor possui acesso a rota",
+        summary="Lista um pedido de compra específico",
+        tags=["Rotas de Orders"],
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(self, request, *args, **kwargs)
+    
+    @extend_schema(
+        operation_id="order_put",
+        responses={200: OrderSerializer},
+        parameters=[
+                OrderSerializer,
+                OpenApiParameter("pk", OpenApiTypes.UUID, OpenApiParameter.PATH)
+            ],
+        description="Rota permite fazer uma alteração em uma ordem de compra, apenas o vendedor possui acesso a rota",
+        summary="Altera totalmente as informações da ordem de compra, apenas o vendedor possui acesso a rota",
+        tags=["Rotas de Orders"],
+    )
+    def put(self, request, *args, **kwargs):
+        return super().put(self, request, *args, **kwargs)
+    
+    @extend_schema(
+        operation_id="order_patch",
+        responses={200: OrderSerializer},
+        parameters=[
+                OrderSerializer,
+                OpenApiParameter("pk", OpenApiTypes.UUID, OpenApiParameter.PATH)
+            ],
+        description="Rota permite fazer uma alteração em uma ordem de compra, apenas o vendedor possui acesso a rota",
+        summary="Altera parcialmente as informações da ordem de compra, apenas o vendedor possui acesso a rota",
+        tags=["Rotas de Orders"],
+    )
+    def patch(self, request, *args, **kwargs):
+        return super().patch(self, request, *args, **kwargs)
+    
+    @extend_schema(
+        operation_id="order_delete",
+        responses={204: None},
+        parameters=[
+                OpenApiParameter("id", OpenApiTypes.UUID, OpenApiParameter.PATH)
+            ],
+        description="Rota permite deletar uma ordem de compra, apenas o vendedor possui acesso a rota",
+        summary="Deleta uma ordem de compra, apenas o vendedor possui acesso a rota",
+        tags=["Rotas de Orders"],
+    )
+    def delete(self, request, *args, **kwargs):
+        return super().delete(self, request, *args, **kwargs)
 		
 class OrderInAccountView(generics.ListAPIView):
 	authentication_classes = [JWTAuthentication]
