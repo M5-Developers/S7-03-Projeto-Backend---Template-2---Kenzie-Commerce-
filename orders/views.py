@@ -71,7 +71,7 @@ class OrderView(generics.ListCreateAPIView):
 
 class OrderViewDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsSeller]
+    permission_classes = [IsAuthenticated, IsSeller]
 
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
