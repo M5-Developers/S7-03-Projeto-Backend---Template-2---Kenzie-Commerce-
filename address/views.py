@@ -104,7 +104,7 @@ class AddressByIdView(generics.RetrieveUpdateDestroyAPIView):
         tags=["Rotas de Address"],
     )
     def put(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+        return super().put(request, *args, **kwargs)
     
     @extend_schema(
         operation_id="address_patch",
@@ -118,7 +118,7 @@ class AddressByIdView(generics.RetrieveUpdateDestroyAPIView):
         tags=["Rotas de Address"],
     )
     def patch(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+        return super().patch(request, *args, **kwargs)
     
     @extend_schema(
         operation_id="address_delete",
@@ -131,4 +131,4 @@ class AddressByIdView(generics.RetrieveUpdateDestroyAPIView):
         tags=["Rotas de Address"],
     )
     def delete(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+        return super().delete(request, *args, **kwargs)

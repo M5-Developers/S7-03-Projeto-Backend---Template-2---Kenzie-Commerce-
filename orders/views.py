@@ -1,6 +1,6 @@
-from django.shortcuts import render
 from rest_framework import generics
-from .serializers import OrderSerializer,Order
+from .serializers import OrderSerializer	
+from .models import Order, ProductOrder
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from utils.sendEmail import send_html
@@ -11,44 +11,70 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
 
 class OrderView(generics.ListCreateAPIView):
+	authentication_classes = [JWTAuthentication]
+	permission_classes = [IsAuthenticated]
 
-    authentication_classes=[JWTAuthentication]
-    permission_classes=[IsAuthenticated]
+	queryset = Order.objects.all()
+	serializer_class = OrderSerializer
 
-    serializer_class=OrderSerializer
-    queryset=Order.objects.all()
+	def perform_create(self, serializer):
+		send_html(self.request.user.email,'Pending')
+		user = self.request.user
+		serializer.save(user=user)
 
-    def perform_create(self, serializer):
-        send_html(self.request.user.email,'Pending')
-        serializer.save(user=self.request.user)
+		order_id = serializer.data['id']
+		products = user.cart.products.get_queryset()
+		
+		for product in products:
+			ProductOrder.objects.create(order_id=order_id, product=product, quantity=user.cart.cart_products.select_related().get(product_id=product.id).quantity)
 
-    @extend_schema(
+
+	@extend_schema(
         operation_id="order_list",
         responses={200: OrderSerializer},
         description="Rota de listagem de pedidos de compra",
         summary="Lista todos os pedidos de compra",
         tags=["Rotas de Orders"],
     )
-    def get(self, request, *args, **kwargs):
-        return super().get(self, request, *args, **kwargs)
+	def get(self, request, *args, **kwargs):
+		return super().get(self, request, *args, **kwargs)
     
-    @extend_schema(
+	@extend_schema(
         operation_id="order_create",
         responses={200: OrderSerializer},
         description="Rota de criação de pedidos de compra",
         summary="Cria um pedido de compra",
         tags=["Rotas de Orders"],
     )
-    def post(self, request, *args, **kwargs):
-        return super().get(self, request, *args, **kwargs)
+	def post(self, request, *args, **kwargs):
+		return super().post(self, request, *args, **kwargs)
+
+	@extend_schema(
+        operation_id="order_list",
+        responses={200: OrderSerializer},
+        description="Rota de listagem de pedidos de compra",
+        summary="Lista todos os pedidos de compra",
+        tags=["Rotas de Orders"],
+    )
+	def get(self, request, *args, **kwargs):
+		return super().get(self, request, *args, **kwargs)
+    
+	@extend_schema(
+        operation_id="order_create",
+        responses={200: OrderSerializer},
+        description="Rota de criação de pedidos de compra",
+        summary="Cria um pedido de compra",
+        tags=["Rotas de Orders"],
+    )
+	def post(self, request, *args, **kwargs):
+		return super().post(self, request, *args, **kwargs)
 
 class OrderViewDetail(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsSeller]
 
-    authentication_classes=[JWTAuthentication]
-    permission_classes=[IsSeller]
-
-    serializer_class=OrderSerializer
-    queryset=Order.objects.all()
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
 
     def perform_update(self, serializer):
         order_pk=self.kwargs['pk']
@@ -112,3 +138,15 @@ class OrderViewDetail(generics.RetrieveUpdateDestroyAPIView):
     )
     def delete(self, request, *args, **kwargs):
         return super().delete(self, request, *args, **kwargs)
+		
+class OrderInAccountView(generics.ListAPIView):
+	authentication_classes = [JWTAuthentication]
+	permission_classes = [IsAuthenticated]
+
+	queryset = Order.objects.all()
+	serializer_class = OrderSerializer
+
+	def get_queryset(self):
+		orders = self.queryset.filter(user_id=self.request.user.id)
+		
+		return orders

@@ -39,7 +39,7 @@ class AccountView(generics.ListCreateAPIView):
         tags=["Rotas de Accounts"],
     )
     def post(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
 
 class AccountDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -77,7 +77,7 @@ class AccountDetailView(generics.RetrieveUpdateDestroyAPIView):
             tags=["Rotas de Accounts"]
     )
     def put(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+        return super().put(request, *args, **kwargs)
     
     @extend_schema(
             operation_id="accounts_patch",
@@ -91,7 +91,7 @@ class AccountDetailView(generics.RetrieveUpdateDestroyAPIView):
             tags=["Rotas de Accounts"]
     )
     def patch(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+        return super().patch(request, *args, **kwargs)
     
     @extend_schema(
             operation_id="accounts_delete",
@@ -104,4 +104,4 @@ class AccountDetailView(generics.RetrieveUpdateDestroyAPIView):
             tags=["Rotas de Accounts"]
     )
     def delete(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+        return super().delete(request, *args, **kwargs)
