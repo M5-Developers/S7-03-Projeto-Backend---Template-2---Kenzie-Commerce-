@@ -46,7 +46,6 @@ class CartProductView(generics.CreateAPIView):
 		if self.request.data['quantity'] > product.quantity:
 			raise exceptions.ValidationError({'message': 'Quantity is greater than the product amount in stock'})
 		
-		
 		account_id = self.request.user.id
 		cart = models.Cart.objects.get(account_id=account_id)
 
