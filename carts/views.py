@@ -41,9 +41,9 @@ class CartProductView(generics.CreateAPIView):
 
 	def perform_create(self, serializer):
 		product_id = self.kwargs.get('product_id')
-		product = get_object_or_404(Product, id=product_id) #pegou o produto que tem a quantidade de estoque nele.
+		product = get_object_or_404(Product, id=product_id)
 		
-		if self.request.data['quantity'] > product.quantity: #aqui compara a qty solicitada a adicionar e a qty que realmente tem
+		if self.request.data['quantity'] > product.quantity:
 			raise exceptions.ValidationError({'message': 'Quantity is greater than the product amount in stock'})
 		
 		account_id = self.request.user.id
@@ -53,7 +53,7 @@ class CartProductView(generics.CreateAPIView):
 		cart_product = self.queryset.filter(cart_id=cart.id, product_id=product_id).first()
 
 		if cart_product:
-			if cart_product.quantity + self.request.data['quantity'] > product.quantity: #aqui comparou se a qty solicitada + a qty no carrinho excede o es
+			if cart_product.quantity + self.request.data['quantity'] > product.quantity:
 				raise exceptions.ValidationError({'message': 'Quantity is greater than the product amount in stock'})
 			
 			cart_product_serializer = serializers.CartProductSerializer(instance=cart_product, data=self.request.data, partial=True)
