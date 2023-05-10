@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Order, ProductOrder
+from django.core.validators import MinValueValidator
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,7 +16,7 @@ class OrderSerializer(serializers.ModelSerializer):
         extra_kwargs={
             'id':{'read_only':True},
             'created_at':{'read_only':True},
-            'user_id':{'read_only':True}
+            'user_id':{'read_only':True},
         }
 
 class ProductOrderSerializer(serializers.ModelSerializer):
