@@ -60,7 +60,7 @@ class CartProductView(generics.CreateAPIView):
 			cart_product_serializer = serializers.CartProductSerializer(instance=cart_product, data=self.request.data, partial=True)
 			cart_product_serializer.is_valid(raise_exception=True)
 
-			return cart_product_serializer.save()
+			#return cart_product_serializer.save()
 
 		serializer.save(cart_id=cart.id, product_id=product_id)
 

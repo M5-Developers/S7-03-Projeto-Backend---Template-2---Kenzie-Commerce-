@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import Product
 
 class ProductSerializer(serializers.ModelSerializer):
+
+	available=serializers.SerializerMethodField()
 	def create(self, validated_data):
 		return Product.objects.create(**validated_data)
 	
@@ -13,3 +15,9 @@ class ProductSerializer(serializers.ModelSerializer):
 				"read_only": True
 			}
 		}
+
+	def get_available(self,obj):
+		if obj.quantity>0:
+			return True
+		return False
+	

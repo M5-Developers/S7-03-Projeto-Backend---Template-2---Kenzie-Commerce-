@@ -1,5 +1,5 @@
 from rest_framework import generics
-from .serializers import OrderSerializer	
+from .serializers import OrderSerializer
 from .models import Order, ProductOrder
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -18,56 +18,27 @@ class OrderView(generics.ListCreateAPIView):
 	serializer_class = OrderSerializer
 
 	def perform_create(self, serializer):
-		send_html(self.request.user.email,'Pending')
-		user = self.request.user
-		serializer.save(user=user)
+                 
+                #send_html(self.request.user.email,'Pending')
+                user = self.request.user
+                serializer.save(user=user)
 
-		order_id = serializer.data['id']
-		products = user.cart.products.get_queryset()
-		
-		for product in products:
-			ProductOrder.objects.create(order_id=order_id, product=product, quantity=user.cart.cart_products.select_related().get(product_id=product.id).quantity)
+                order_id = serializer.data['id']
+                products = user.cart.products.get_queryset()  
+                print(products)
+            
+                for product in products:
+                    order=ProductOrder.objects.create(
+                        order_id=order_id, 
+                        product=product, 
+                        quantity=user.cart.cart_products.select_related().filter(product_id=product.id).first().quantity
+                    )
+                    print(order.quantity)
+                    
+                    
+                
 
 
-	@extend_schema(
-        operation_id="order_list",
-        responses={200: OrderSerializer},
-        description="Rota de listagem de pedidos de compra",
-        summary="Lista todos os pedidos de compra",
-        tags=["Rotas de Orders"],
-    )
-	def get(self, request, *args, **kwargs):
-		return super().get(self, request, *args, **kwargs)
-    
-	@extend_schema(
-        operation_id="order_create",
-        responses={200: OrderSerializer},
-        description="Rota de criação de pedidos de compra",
-        summary="Cria um pedido de compra",
-        tags=["Rotas de Orders"],
-    )
-	def post(self, request, *args, **kwargs):
-		return super().post(self, request, *args, **kwargs)
-
-	@extend_schema(
-        operation_id="order_list",
-        responses={200: OrderSerializer},
-        description="Rota de listagem de pedidos de compra",
-        summary="Lista todos os pedidos de compra",
-        tags=["Rotas de Orders"],
-    )
-	def get(self, request, *args, **kwargs):
-		return super().get(self, request, *args, **kwargs)
-    
-	@extend_schema(
-        operation_id="order_create",
-        responses={200: OrderSerializer},
-        description="Rota de criação de pedidos de compra",
-        summary="Cria um pedido de compra",
-        tags=["Rotas de Orders"],
-    )
-	def post(self, request, *args, **kwargs):
-		return super().post(self, request, *args, **kwargs)
 
 class OrderViewDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
